@@ -1,11 +1,9 @@
 from django.urls import path, include
 
-from .views import contacts_view, tasks_view, contacts_detail_view, tasks_detail_view
+from .views import ContactList, TaskList
 
 
 urlpatterns = [
-    path('contact/', contacts_view),
-    path('contact/<int:pk>/', contacts_detail_view),
-    path('task/', tasks_view),
-    path('task/<int:pk>/', tasks_detail_view),
+    path('contacts', ContactList.as_view()),
+    path('tasks', TaskList.as_view()),
 ]
