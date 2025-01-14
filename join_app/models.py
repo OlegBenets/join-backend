@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 CATEGORY = (
     ("user_story", "User Story"),
@@ -19,10 +20,11 @@ STATUS = (
 )
 
 class Contact(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='contacts', null=True, blank=True)
     name = models.CharField(max_length=30)
     email = models.EmailField(max_length=30)
-    phone = models.IntegerField()
-    color = models.CharField(max_length=30)
+    phone = models.IntegerField(null=True, blank=True)
+    color = models.CharField(max_length=8)
     
     def __str__(self):
         return f"{self.name} ({self.pk})"
@@ -42,7 +44,7 @@ class Task(models.Model):
 class SubTask(models.Model):
     title = models.CharField(max_length=255)
     checked = models.BooleanField()
-    task = models.ForeignKey(Task, related_name="subTasks", on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, related_name="sub_tasks", on_delete=models.CASCADE)
     
     def __str__(self):
         return self.title

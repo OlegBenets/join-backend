@@ -1,20 +1,11 @@
 from rest_framework import generics
-from user_auth_app.models import UserProfile
-from .serializers import UserProfileSerializer, RegistrationsSerializer
+from .serializers import RegistrationsSerializer
 from rest_framework.views import APIView 
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
-
-class UserProfileList(generics.ListCreateAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
-    
-
-class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
+from join_app.models import Contact
     
 class RegistrationView(APIView):
     permission_classes = [AllowAny]
@@ -25,7 +16,17 @@ class RegistrationView(APIView):
         data = {}
         if serializer.is_valid():
             saved_account = serializer.save()
+            
+            Contact.objects.create(
+                user=saved_account, 
+                name=saved_account.username, 
+                email=saved_account.email,
+                phone=None,  
+                color="#00bee8"
+            )
+            
             token, created = Token.objects.get_or_create(user=saved_account)
+            
             data = {
                 'token': token.key,
                 'username': saved_account.username,
@@ -33,6 +34,7 @@ class RegistrationView(APIView):
             }
         else:
             data=serializer.errors
+            
         return Response(data)
     
 class CustomLoginView(ObtainAuthToken):

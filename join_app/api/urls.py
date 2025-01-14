@@ -1,9 +1,13 @@
 from django.urls import path, include
+import user_auth_app.api.urls 
+from rest_framework import routers
+from .views import ContactViewSet, TaskViewSet
 
-from .views import ContactList, TaskList
-
+router = routers.SimpleRouter()
+router.register(r'tasks', TaskViewSet)
+router.register(r'contacts', ContactViewSet)
 
 urlpatterns = [
-    path('contacts', ContactList.as_view(),),
-    path('tasks', TaskList.as_view()),
+    path("", include(router.urls)),
+    path("", include(user_auth_app.api.urls)),
 ]
