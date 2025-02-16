@@ -22,7 +22,7 @@ class RegistrationView(APIView):
                 name=saved_account.username, 
                 email=saved_account.email,
                 phone=None,  
-                color="#00bee8"
+                color="00bee8"
             )
             
             token, created = Token.objects.get_or_create(user=saved_account)

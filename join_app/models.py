@@ -23,7 +23,7 @@ class Contact(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='contacts', null=True, blank=True)
     name = models.CharField(max_length=30)
     email = models.EmailField(max_length=30)
-    phone = models.IntegerField(null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
     color = models.CharField(max_length=8)
     
     def __str__(self):
@@ -36,14 +36,14 @@ class Task(models.Model):
     date = models.DateField()
     prio = models.CharField(max_length=30, choices=PRIO, default='medium')
     status = models.CharField(max_length=30, choices=STATUS, default='todo')
-    asignt_to = models.ManyToManyField(Contact, related_name="tasks")
+    assigned_to = models.ManyToManyField(Contact, related_name="tasks")
 
     def __str__(self):
         return self.title
 
 class SubTask(models.Model):
     title = models.CharField(max_length=255)
-    checked = models.BooleanField()
+    checked = models.BooleanField(default=False)
     task = models.ForeignKey(Task, related_name="sub_tasks", on_delete=models.CASCADE)
     
     def __str__(self):
