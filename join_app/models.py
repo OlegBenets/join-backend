@@ -14,9 +14,14 @@ PRIO = (
 
 STATUS = (
     ('todo', 'Todo'),
-    ('in_progress', 'In progress'),
-    ('await_feedback', 'Await feedback'),
+    ('progress', 'In progress'),
+    ('await', 'Await feedback'),
     ('done', 'Done'),
+)
+
+CHECKED_STATUS = (
+        ("checked", "Checked"),
+        ("unchecked", "Unchecked"),
 )
 
 class Contact(models.Model):
@@ -43,7 +48,7 @@ class Task(models.Model):
 
 class SubTask(models.Model):
     title = models.CharField(max_length=255)
-    checked = models.BooleanField(default=False)
+    checked = models.CharField(max_length=10, choices=CHECKED_STATUS, default="unchecked")
     task = models.ForeignKey(Task, related_name="sub_tasks", on_delete=models.CASCADE)
     
     def __str__(self):
